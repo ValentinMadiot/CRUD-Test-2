@@ -1,48 +1,42 @@
 //*--------------------------------------------------------------------------------
-//*------------------------- LIBRAIRIE + FICHIER IMPORTE --------------------------
+//*------------------------------------- APP --------------------------------------
 //*--------------------------------------------------------------------------------
 
-//* IMPORT + DECLARATION DOTENV
+//* IMPORT LIBRAIRIE
 require('dotenv').config()
-
-//* APPEL/IMPORT EXPRESS
 const express = require('express')
-//* DECLARE EXPRESS
-const app = express();
+const path = require('path')
+// const bodyParser = require('body-parser') (OBSOLETE)
 
-//* APPEL/IMPORT BODY-PARSER (OBSOLETE)
-const bodyParser = require('body-parser')
-
-//* IMPORT DES ROUTES ROUTES => STUFF
+//* IMPORT ROUTE
+const userRoutes = require('./routes/user')
 const stuffRoutes = require('./routes/stuff')
 
-//* IMPORT DES ROUTES ROUTES => USER
-const userRoutes = require('./routes/user')
+//* EXPRESS
+const app = express()
 
-//* IMPORT DE PATH => POUR LES IMAGES
-const path = require('path')
+//* MIDDLEWARE
 
-//! EMPECHER les errurs Cors avec les headers spécifiques de contrôle d'accès
+//* Paramétrage des headers HTTP :
 app.use((req, res, next) => {
+  // Accéder à notre API depuis n'importe quelle origine
   res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  // Ajouter les headers mentionnés aux requêtes envoyées vers notre API
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization')
+  // Envoyer des requêtes avec les méthodes mentionnées
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
   next()
 })
 
-//* UTILISATION de la libraire EXPRESS
-// app.use(express.json())
-//* UTILISATION de la librairie body-parser (OBSOLETE)
-app.use(bodyParser.json())
+//* Parser : Analyse le corps d'une requête HTTP, assemble les données, crée un objet body exploitable
+app.use(express.json())
 
-//* UTILISATION des données d'un PRODUIT
+//* ROUTE
+app.use('/api/auth', userRoutes)
 app.use('/api/stuff', stuffRoutes)
 
-//* UTILISATION des données de l'UTILISATEUR
-app.use('/api/auth', userRoutes)
-
-//* UTILISATION du chemin de l'image de l'utilisateur avec express
+//* CHEMIN IMAGE
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
-//* EXPORTATION des données 
+//* EXPORTATION DES DONNEES SUR LA CONFIG DU SERVEUR
 module.exports = app

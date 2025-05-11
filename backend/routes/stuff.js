@@ -2,11 +2,8 @@
 //*------------------------- LIBRAIRIE + FICHIER IMPORTE --------------------------
 //*--------------------------------------------------------------------------------
 
-//* APPEL/IMPORT EXPRESS
+//* IMPORT EXPRESS
 const express = require('express')
-
-//* DECLARE ROUTER D'EXPRESS
-const router = express.Router()
 
 //* IMPORT DE LA CONFIGURATION D'AUTHENTIFICATION
 const auth = require('../middleware/auth')
@@ -17,8 +14,11 @@ const multer = require('../middleware/multer-config')
 //* IMPORT DES FONCTIONS/LOGIQUES METIERS
 const stuffCtrl = require('../controllers/stuff');
 
+//* DECLARE ROUTER D'EXPRESS
+const router = express.Router()
+
 //*--------------------------------------------------------------------------------
-//*------------------------------------ ROUTES ------------------------------------
+//*-------------------------------- ROUTES SAUCES ---------------------------------
 //*--------------------------------------------------------------------------------
 
 //* POST UNE CREATION D'OBJET D'UN CLIENT
@@ -30,10 +30,10 @@ router.get('/', auth, stuffCtrl.getAllThings)
 //* PUBLI LES DONNEES DU PRODUIT SUR LA PAGE PRODUIT
 router.get('/:id', auth, stuffCtrl.getOneThing)
 
-//* MODIFICATION D'UN PRODUIT DU CLIENT
+//* MODIFIE UN PRODUIT DU CLIENT
 router.put('/:id', auth, multer, stuffCtrl.modifyThing)
 
-//* SUPPRESSION D'UN PRODUIT DU CLIENT
+//* SUPPRIME UN PRODUIT DU CLIENT
 router.delete('/:id', auth, stuffCtrl.deleteThing)
 
 //* EXPORTATION DES ROUTES

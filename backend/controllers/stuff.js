@@ -5,59 +5,84 @@
 //* IMPORT DES MODELE DE THING
 const Thing = require('../models/Thing')
 
-//* APPEL/IMPORT DE FS (SUPPRIMER LES IMAGES EN LOCAL)
+//* IMPORT DE FS (SUPPRIMER LES IMAGES)
 const fs = require('fs')
 
 //*--------------------------------------------------------------------------------
-//*------------------------------- FONCTION PRODUIT -------------------------------
+//*------------------------------ CONTROLLER PRODUIT ------------------------------
 //*--------------------------------------------------------------------------------
 
-//* CREER UN OBJET
+//* AFFICHER TOUS LES PRODUITS DE LA DATABASE AVEC LA METHODE ".find"
+exports.getAllThings = (req, res, next) => {
+  Thing.find()
+    .then(things => res.status(200).json(things))
+    .catch(error => res.status(400).json({ error }))
+}
+
+//?--------------------------------------------------------------------------------
+
+//* AFFICHER UN PRODUIT DE LA DATABASE SELECTIONNEE AVEC LA METHODE ".findOne"
+exports.getOneThing = (req, res, next) => {
+  Thing.findOne({ _id: req.params.id })
+    .then(thing => res.status(200).json(thing))
+    .catch(error => res.status(400).json({ error }))
+}
+
+//?--------------------------------------------------------------------------------
+
+//* CREER UN PRODUIT DANS LA DATABASE
 exports.createThing = (req, res, next) => {
-  //* AJOUTER un objet à la requête
+  //* PARSER L'OBJET DE LA REQUETE
   const thingObject = JSON.parse(req.body.thing)
-  //* SUPPRIMER champ id/userId de la requête client
+  //* SUPPRIMER LES CHAMPS "_userId" ET "_id" DE LA REQUETE CLIENT
   delete thingObject._id
   delete thingObject._userId
-  //* CREATION d'un nouvel objet
+  //* CREER UN NOUVEL OBJET AVEC LE MODELE DE THING
   const thing = new Thing ({
-    //* ... = tous les champs de thingObjet
+    //* ... = TOUS LES CHAMPS DE "thingObject"
     ...thingObject,
-    //* RECUPERE userId de l'authentification
+    //* RECUPERE "userId" DEPUIS LE TOKEN D'AUTHENTIFICATION
     userId: req.auth.userId,
-    //* URL de l'image
+    //* CREER L'URL DE L'IMAGE
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   })
-  //* ENRENGISTREMENT dans la database
+  //* ENRENGISTRER DANS LA DATABASE
   thing.save()
     .then(() => res.status(201).json({message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error })) 
 }
 
-//* MODIFIER UN OBJET
+//?--------------------------------------------------------------------------------
+
+//* MODIFIER UNE PRODUIT AVEC LA METHODE ".updateOne"
 exports.modifyThing = (req, res, next) => {
-  //* VERIFIER si l'objet existe
+  //* VERIFIER S'IL Y A UN OBJET DANS NOTRE REQUETE "req.file"
   const thingObject = req.file ? {
-    //* PARSE la requête s'il existe
+    //* PARSE L'OBJET DE LA REQUETE
     ...JSON.parse(req.body.thing),
-    //* URL de l'image
+    //* CREER L'URL DE L'IMAGE
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    //* TRAITER l'objet entrant s'il n'existe pas
-  } : { ...req.body }
-  //* SUPPRIMER champ id/userId de la requête client
+  //* ENSUITE RECUPERER LES DONNEES A MODIFIER "...req.body"
+} : { ...req.body }
+  //* SUPPRIMER LE CHAMP "userId" DE LA REQUETE
   delete thingObject._userId
-  //* CHERCHER l'objet dans la database
+  //* CHERCHER L'OBJET DANS LA DATABASE
   Thing.findOne({ _id: req.params.id })
-    //* VERIFICATION que l'utilisateur est le propriétaire de l'objet à modifier
+    //* VERIFIER QUE L'UTILISATEUR EST LE PROPRIETAIRE DE L'OBJET A MODIFIER
     .then((thing) => {
-      //* SI userId de la database est != de userId de la requête 
+      //* SI "userId" DE LA DATABASE EST != DE "userId" DE LA REQUETE 
       if (thing.userId != req.auth.userId) {
-        //* ON annule et on renvoi un message "Non-autorisé"
+        //* ANNULER LA REQUETE ET RENVOI UN MSG "Non-autorisé"
         res.status(401).json({ message: 'Non-autorisé' })
-      //* SI il est le propriétaire
-      } else {
-        //* RECUPERER les nouvelles données à remplacer, trouver l'objet qui correspond au modification à apporter 
-        Thing.updateOne({ _id: req.params.id}, {...thingObject, _id: req.params.id})
+      //* SI IL EST LE PROPRIETAIRE
+    } else {
+      //* SI L'UTILISATEUR CHANGE L'IMAGE, SUPPRIMER L'ANCIENNE
+      if (req.file) {
+        const filename = thing.imageUrl.split("/images/")[1]
+        fs.unlink(`images/${filename}`, () => {})
+      }
+      //* ECRASER LES ANCIENNES DONNEES PAR LES NOUVELLES => "thingObject"
+      Thing.updateOne({ _id: req.params.id}, {...thingObject, _id: req.params.id})
           .then(() => res.status(200).json({message : ' Objet modifié! '}))
           .catch(error => res.status(401).json({ error }))
       }
@@ -65,21 +90,24 @@ exports.modifyThing = (req, res, next) => {
     .catch((error) => req.status(400).json({ error }))
 }
 
-//* FONCTION qui permet de SUPPRIMER un objet
+//?--------------------------------------------------------------------------------
+
+//* SUPPRIMER UN PRODUIT AVEC LA METHODE ".deleteOne"
 exports.deleteThing = (req, res, next) => {
-  //* CHERCHER l'objet dans la database
+  //* CHERCHER L'OBJET DANS LA DATABASE
   Thing.findOne({ _id: req.params.id })
-    //* VERIFICATION que l'utilisateur est le propriétaire de l'objet à supprimer
+  //* VERIFIER QUE L'UTILISATEUR EST LE PROPRIETAIRE DE L'OBJET A SUPPRIMER
     .then(thing => {
-      //* SI userId de la database est != de userId de la requête 
+      //* SI "userId" DE LA DATABASE EST != DE "userId" DE LA REQUETE
       if (thing.userId != req.auth.userId) {
-        //* ON annule et on renvoi un message "Non-autorisé"
+        //* ANNULER LA REQUETE ET RENVOI UN MSG "Non-autorisé"
         res.status(401).json({ message: 'Non autorisé!' })
       } else {
-        //* CHERCHE l'IMAGE à supprimer localement
+        //* SINON CHERCHER LE NOM DE L'IMAGE A SUPPRIMER AVEC "split"
         const filename = thing.imageUrl.split('/images/') [1]
-        //* UTILISATION de fs pour supprimer l'image
+        //* UTILISER FS POUR SUPPRIMER L'IMAGE
         fs.unlink(`images/${filename}`, () => {
+          //* CALLBACK POUR SUPPRIMER LA SAUCE DE LA DATABASE
           Thing.deleteOne({_id: req.params.id})
             .then(() => res.status(200).json({ message: 'Objet supprimé' }))
             .catch(error => res.status(401).json({ error }))
@@ -87,18 +115,4 @@ exports.deleteThing = (req, res, next) => {
       }
     })
     .catch(error => res.status(500).json({ error }))
-}
-
-//* FONCTION qui permet de RECUPERER un objet sur la page PRODUIT
-exports.getOneThing = (req, res, next) => {
-  Thing.findOne({ _id: req.params.id })
-    .then(thing => res.status(200).json(thing))
-    .catch(error => res.status(400).json({ error }))
-}
-
-//* FONCTION qui permet de RECUPERER tous les objets sur la page ACCUEIL
-exports.getAllThings = (req, res, next) => {
-  Thing.find()
-    .then(things => res.status(200).json(things))
-    .catch(error => res.status(400).json({ error }))
 }

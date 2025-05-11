@@ -5,31 +5,29 @@
 //* IMPORT FICHIER APP
 const app = require('./app')
 
-//* IMPORTATION PACKAGE HTTP NATIF DE NODE
+//* IMPORT PACKAGE HTTP NATIF DE NODE
 const http = require('http')
 
 //* DECLARE LE SERVEUR AVEC LE PACKAGE HTTP
 const server = http.createServer(app)
 
-//* RENVOI UN PORT VALIDE
+//! GESTION DU PORT :
+//* "normalizePort" => RENVOIE UN PORT VALIDE, QU'IL SOIT FOURNI SOUR LA FORME D'UN NUMERO OU D'UNE CHAINE
 const normalizePort = val => {
   const port = parseInt (val, 10)
-  if (isNaN(port)) {
-    return val
-  }
-  if (port >= 0) {
-    return port
-  }
+  if (isNaN(port)) { return val }
+  if (port >= 0) { return port }
   return false
 }
 
-//* DECLARE LE PORT => 3000
+//* EXPORT DU PORT QUI EST PAR DEFAULT SUR 3000
 const port = normalizePort(process.env.PORT || '3000')
 
 //* LE PACKAGE HTTP UTILISE LE PORT 3000
 app.set('Port :', port)
 
-//* RECHERCHE LES DIFFERENTES ERREURS
+//! GESTION DES ERREURS :
+//* "errorHandler" => RECHERCHE LES DIFFERENTES ERREURS ET LES GERES DE MANIERE APPROPRIEE
 const errorHandler = error => {
   if (error.syscall !== 'listen') {
     throw error

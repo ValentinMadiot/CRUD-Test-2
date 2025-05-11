@@ -2,14 +2,14 @@
 //*---------------------------------- LIBRAIRIE -----------------------------------
 //*--------------------------------------------------------------------------------
 
-//* APPEL/IMPORT MONGOOSE
+//* IMPORT MONGOOSE
 const mongoose = require('../services/database')
 
 //*--------------------------------------------------------------------------------
 //*------------------------------- SCHEMA MONGOOSE --------------------------------
 //*--------------------------------------------------------------------------------
 
-//* CREER SCHEMA
+//* CREER SCHEMA SAUCE
 const thingSchema = mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },

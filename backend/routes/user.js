@@ -2,14 +2,14 @@
 //*------------------------- LIBRAIRIE + FICHIER IMPORTE --------------------------
 //*--------------------------------------------------------------------------------
 
-//* APPEL/IMPORT EXPRESS
+//* IMPORT EXPRESS
 const express = require('express')
-
-//* DECLARE ROUTER D'EXPRESS
-const router = express.Router()
 
 //* IMPORT LE CONTROLE DES UTILISATEURS
 const userCtrl = require('../controllers/user')
+
+//* DECLARE ROUTER D'EXPRESS
+const router = express.Router()
 
 //*--------------------------------------------------------------------------------
 //*------------------------------ ROUTES CONNECTION -------------------------------
