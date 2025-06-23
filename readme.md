@@ -11,16 +11,16 @@
 
 ## <br /> <a name="introduction">🎨 Introduction</a>
 
-Ce projet est un exercice scolaire réalisé dans le cadre d'un parcours chez **OpenClassrooms**.  
-Il consiste en la création d'une API RESTful utilisant **Node.js**, **Express** et **MongoDB** pour gérer un catalogue de produits.  
-L'API inclut une authentification robuste, une intégration complète à MongoDB, et des opérations CRUD (Create, Read, Update, Delete).
+Ce projet est un exercice scolaire réalisé dans le cadre d'un parcours chez **OpenClassrooms**.
 
-L'application frontend permet de tester automatiquement l'API, révélant un mot secret une fois tous les tests validés.
+Il consiste à construire une API RESTful avec **Node.js**, **Express** et **MongoDB** pour gérer un catalogue de produits.
+
+L'API inclut une authentification sécurisée (**JWT**), une intégration complète à **MongoDB**, et des opérations **CRUD** (Create, Read, Update, Delete).
 
 ## <br /> <a name="technologies">⚙️ Technologies</a>
 
 - **Backend** : Node.js, Express
-- **Base de données** : MongoDB (via Mongoose)
+- **Base de données** : MongoDB (Mongoose)
 - **Sécurité** : Bcrypt, Crypto-js, Helmet, Jsonwebtoken
 - **Gestion des fichiers** : Multer
 - **Validation de schéma** : Mongoose-unique-validator
@@ -29,14 +29,11 @@ L'application frontend permet de tester automatiquement l'API, révélant un mot
 
 ## <br /> <a name="fonctionnalités">🎯 Fonctionnalités</a>
 
-&nbsp;&nbsp;&nbsp; ✅ &nbsp; Création de produit  
-&nbsp;&nbsp;&nbsp; 📄 &nbsp; Lecture d’un ou plusieurs produits  
-&nbsp;&nbsp;&nbsp; ✏️ &nbsp; Mise à jour d’un produit  
-&nbsp;&nbsp;&nbsp; ❌ &nbsp; Suppression d’un produit  
-&nbsp;&nbsp;&nbsp; 🔐 &nbsp; Authentification sécurisée avec JWT  
-&nbsp;&nbsp;&nbsp; 🔄 &nbsp; Gestion des fichiers (upload d'images)  
-&nbsp;&nbsp;&nbsp; ⚠️ &nbsp; Gestion des erreurs  
-&nbsp;&nbsp;&nbsp; 🛡️ &nbsp; Sécurisation des routes avec Helmet
+- CRUD complet sur produits
+- Authentification sécurisée avec JWT
+- Upload d’images via Multer
+- Sécurisation des headers avec Helmet
+- Gestion centralisée des erreurs
 
 ## <br /> <a name="schéma">🧱 Schéma & Routes</a>
 
@@ -115,10 +112,13 @@ mongoose.Schema({
 
 ### ✅ Prérequis
 
-- 🛠️ **[Git](https://git-scm.com/)**
-- 🔧 **[Node.js](https://nodejs.org/fr/)**
-- 📦 **[npm](https://www.npmjs.com/)**
-- 🍃 **[MongoDB](https://www.mongodb.com/)** (Atlas ou local)
+- [Git](https://git-scm.com/) &nbsp;—&nbsp; Système de gestion de versions
+- [Node.js](https://nodejs.org/fr) &nbsp;—&nbsp; Exécuteur local de scripts JavaScript
+- [npm](https://www.npmjs.com/) &nbsp;—&nbsp; Gestionnaire de paquets JavaScript
+- [MongoDB](https://www.mongodb.com/) — Base de données NoSQL
+- [Google Chrome](https://www.google.com/) &nbsp;—&nbsp; Navigateur moderne
+- [Visual Studio Code](https://code.visualstudio.com/) &nbsp;—&nbsp; Éditeur de code
+- [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) &nbsp;—&nbsp; Extension VS Code
 
 ### 📥 Clonage
 
@@ -127,33 +127,13 @@ git clone https://github.com/ValentinMadiot/CRUD-Test-2
 cd CRUD-Test-2
 ```
 
-### 📦 Installation des dépendances
-
-#### Backend
-
-```bash
-cd backend
-npm install
-```
-
-#### Frontend
-
-```bash
-cd frontend
-npm install
-```
-
 ### 🔧 Configuration de l'environnement
 
-Dans le dossier backend, renommer le fichier `.env.example` en `.env` :
+Renommer `.env.exemple` en `.env`
+
+Ajoutez vos variables `.env` :
 
 ```bash
-mv .env.example .env
-```
-
-Ajoutez les variables d'environnement dans le fichier `.env` :
-
-```env
 # Database MongoDB
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/myDatabase?retryWrites=true&w=majority
 
@@ -161,18 +141,24 @@ MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/myDatabase?
 JWT_KEY=
 ```
 
-### ▶️ Lancement des serveurs
+### ▶️ Lancement du serveur
 
-#### Backend
+### Backend
 
 ```bash
 cd backend
+npm install
 npm start
 ```
 
-#### Frontend
+Backend disponible sur : `http://localhost:8080`
+
+### Frontend
 
 ```bash
 cd frontend
+npm install
 npm start
 ```
+
+Frontend disponible sur : `http://localhost:8081`
