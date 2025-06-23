@@ -120,7 +120,7 @@ mongoose.Schema({
 - [Visual Studio Code](https://code.visualstudio.com/) &nbsp;—&nbsp; Éditeur de code
 - [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) &nbsp;—&nbsp; Extension VS Code
 
-### 📥 Clonage
+### 📥 Cloner le projet
 
 ```bash
 git clone https://github.com/ValentinMadiot/CRUD-Test-2
@@ -131,17 +131,17 @@ cd CRUD-Test-2
 
 Renommer `.env.exemple` en `.env`
 
-Ajoutez vos variables `.env` :
+Ajoutez les variables d’environnement dans le fichier `.env` :
 
 ```bash
 # Database MongoDB
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/myDatabase?retryWrites=true&w=majority
 
 # Json-Web-Token / Authentication
-JWT_KEY=
+JWT_KEY=mon_secret_token
 ```
 
-### ▶️ Lancement du serveur
+### ▶️ Lancer le projet
 
 ### Backend
 
