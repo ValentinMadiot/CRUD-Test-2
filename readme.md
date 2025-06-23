@@ -118,7 +118,6 @@ mongoose.Schema({
 - [MongoDB](https://www.mongodb.com/) — Base de données NoSQL
 - [Google Chrome](https://www.google.com/) &nbsp;—&nbsp; Navigateur moderne
 - [Visual Studio Code](https://code.visualstudio.com/) &nbsp;—&nbsp; Éditeur de code
-- [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) &nbsp;—&nbsp; Extension VS Code
 
 ### 📥 Cloner le projet
 
@@ -134,10 +133,10 @@ Renommer `.env.exemple` en `.env`
 Ajoutez les variables d’environnement dans le fichier `.env` :
 
 ```bash
-# Database MongoDB
+# IDENTIFIANT BASE DE DONNEES (MongoDB)
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/myDatabase?retryWrites=true&w=majority
 
-# Json-Web-Token / Authentication
+# PASSWORD JWT (JSON Web Token)
 JWT_KEY=mon_secret_token
 ```
 
